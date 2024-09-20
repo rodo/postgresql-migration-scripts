@@ -11,9 +11,9 @@ To avoid this we will create a temporary objects in the schema
 (columns, index, trigger and function) that will be play on production
 on a manner that limit the locks.
 
-HOWTO
+## HOWTO
 
-1. edit the `migration.py` script to defin the table and column you want to change
+1. edit the `migration.py` script to define the table and column you want to change
 
 2. run `migration.py`
 

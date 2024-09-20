@@ -3,6 +3,7 @@
 --
 --
 -- add the new column
+\timing on
 {% for table in tables -%}
 
 UPDATE {{table.name}} SET {{ table.column }}_new = {{ table.column }}
