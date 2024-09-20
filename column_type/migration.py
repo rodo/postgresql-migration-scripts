@@ -45,12 +45,11 @@ generate_file(
     2 * len(tables),
 )
 
-
 generate_file(
     environment.get_template("test_after.sql"),
     "03_test_after.sql",
     tables,
-    6 * len(tables),
+    7 * len(tables),
 )
 
 generate_file(environment.get_template("update.sql"), "04_update.sql", tables, 10000)
