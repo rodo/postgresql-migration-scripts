@@ -7,11 +7,13 @@ SELECT plan ( {{nbstep}} ) ;
 
 {% for table in tables -%}
 
-SELECT has_table( '{{ table.name }}' );
+SELECT has_table( '{{ table.name }}'::name );
 
-SELECT has_column( '{{ table.name}}' , '{{ table.column }}' );
+SELECT has_column( '{{ table.name}}'::name, '{{ table.column }}'::name );
 
-SELECT has_column( '{{ table.name}}' , '{{ table.column }}_new' );
+SELECT has_column( '{{ table.name}}'::name, '{{ table.column }}_new'::name );
+
+SELECT col_type_is( '{{ table.name}}'::name, '{{ table.column }}_new'::name, '{{ table.type }}' );
 
 SELECT has_function( '{{ table.name}}_{{ table.column}}_migr01_trg' );
 
