@@ -1,3 +1,11 @@
+"""
+Manage huge and sometimes complex data migration in 3 steps
+
+- Edit the variable tables 10 lines below in this script
+- Run the script
+- Enjoy the SQL files generated
+
+"""
 from jinja2 import Environment, FileSystemLoader
 
 #
@@ -10,10 +18,12 @@ tables = [
 ]
 
 
-def generate_file(template_test, filename, tables, nbstep):
-
+def generate_file(template_test, filename, data, nbstep):
+    """
+    Load a jinja template and generate the associated file
+    """
     with open(filename, mode="w", encoding="utf-8") as message:
-        message.write(template_test.render(tables=tables, nbstep=nbstep))
+        message.write(template_test.render(tables=data, nbstep=nbstep))
         print(f"... wrote {filename}")
 
 
