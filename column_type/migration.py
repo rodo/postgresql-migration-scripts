@@ -6,6 +6,8 @@ Manage huge and sometimes complex data migration in 3 steps
 - Enjoy the SQL files generated
 
 """
+
+import os
 from jinja2 import Environment, FileSystemLoader
 
 #
@@ -29,56 +31,93 @@ def generate_file(template_test, filename, data, nbstep):
 
 environment = Environment(loader=FileSystemLoader("templates/"))
 
-#
-# Generate files
-generate_file(
-    environment.get_template("test_before.sql"),
-    "01_test_before.sql",
-    tables,
-    2 * len(tables),
-)
 
-generate_file(
-    environment.get_template("addcolumns.sql"),
-    "02_add_columns.sql",
-    tables,
-    2 * len(tables),
-)
+def generate_global_file(path, table_list):
+    """
+    Generate files in the specified directory `path`
+    """
+    generate_file(
+        environment.get_template("test_before.sql"),
+        os.path.join(path, "01_test_before.sql"),
+        table_list,
+        2 * len(table_list),
+    )
 
-generate_file(
-    environment.get_template("test_after.sql"),
-    "03_test_after.sql",
-    tables,
-    7 * len(tables),
-)
+    generate_file(
+        environment.get_template("addcolumns.sql"),
+        os.path.join(path, "02_add_columns.sql"),
+        table_list,
+        2 * len(table_list),
+    )
 
-generate_file(environment.get_template("update.sql"), "04_update.sql", tables, 10000)
+    generate_file(
+        environment.get_template("test_after.sql"),
+        os.path.join(path, "03_test_after.sql"),
+        table_list,
+        7 * len(table_list),
+    )
 
-generate_file(
-    environment.get_template("vacuum.sql"), "05_vacuum.sql", tables, 6 * len(tables)
-)
+    generate_file(
+        environment.get_template("update.sql"),
+        os.path.join(path, "04_update.sql"),
+        table_list,
+        10000,
+    )
 
-generate_file(
-    environment.get_template("test_final.sql"),
-    "06_check_datas.sql",
-    tables,
-    6 * len(tables),
-)
+    generate_file(
+        environment.get_template("vacuum.sql"),
+        os.path.join(path, "05_vacuum.sql"),
+        table_list,
+        6 * len(table_list),
+    )
 
-generate_file(
-    environment.get_template("switch_columns.sql"),
-    "07_switch.sql",
-    tables,
-    6 * len(tables),
-)
+    generate_file(
+        environment.get_template("test_final.sql"),
+        os.path.join(path, "06_check_datas.sql"),
+        table_list,
+        6 * len(table_list),
+    )
 
-generate_file(
-    environment.get_template("drop_objects.sql"), "08_drop.sql", tables, 6 * len(tables)
-)
+    generate_file(
+        environment.get_template("switch_columns.sql"),
+        os.path.join(path, "07_switch.sql"),
+        table_list,
+        6 * len(table_list),
+    )
 
-generate_file(
-    environment.get_template("test_clean.sql"),
-    "09_test_clean.sql",
-    tables,
-    6 * len(tables),
-)
+    generate_file(
+        environment.get_template("drop_objects.sql"),
+        os.path.join(path, "08_drop.sql"),
+        table_list,
+        6 * len(table_list),
+    )
+
+    generate_file(
+        environment.get_template("test_clean.sql"),
+        os.path.join(path, "09_test_clean.sql"),
+        table_list,
+        6 * len(table_list),
+    )
+
+
+def main(table_list):
+    """
+    Do the generation of files in the global directory and in a drectory per table
+    """
+
+    # generate the SQL command in global files
+    generate_global_file("output", table_list)
+
+    # genreate the SQL command in one directory per table
+    for table in table_list:
+        ltable = []
+        ltable.append(table)
+        try:
+            os.makedirs(os.path.join("output", table['name']))
+        except OSError:
+            pass
+        generate_global_file(os.path.join("output", table['name']), ltable)
+
+
+if __name__ == "__main__":
+    main(tables)
