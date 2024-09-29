@@ -6,7 +6,7 @@
 BEGIN;
 
 -- add the new column
-ALTER TABLE {{ table.name }} ADD COLUMN {{ table.column }}_new {{ table.type }};
+ALTER TABLE {{ table.name }} ADD COLUMN {{ table.column }}_new {{ table.dest_type }};
 
 -- create a trigger to keep the new column up to date during the migration
 CREATE OR REPLACE FUNCTION {{ table.name }}_{{ table.column }}_migr01_trg()

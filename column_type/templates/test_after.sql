@@ -13,7 +13,7 @@ SELECT has_column( '{{ table.name}}'::name, '{{ table.column }}'::name );
 
 SELECT has_column( '{{ table.name}}'::name, '{{ table.column }}_new'::name );
 
-SELECT col_type_is( '{{ table.name}}'::name, '{{ table.column }}_new'::name, '{{ table.type }}' );
+SELECT col_type_is( '{{ table.name}}'::name, '{{ table.column }}_new'::name, '{{ table.dest_type }}' );
 
 SELECT has_function( '{{ table.name}}_{{ table.column}}_migr01_trg' );
 
