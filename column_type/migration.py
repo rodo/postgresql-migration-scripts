@@ -8,6 +8,7 @@ Manage huge and sometimes complex data migration in 3 steps
 """
 
 import os
+import argparse
 from jinja2 import Environment, FileSystemLoader
 
 #
@@ -42,7 +43,7 @@ def generate_file(template_test, filename, data, nbstep):
 environment = Environment(loader=FileSystemLoader("templates/"))
 
 
-def generate_global_file(path, table_list):
+def generate_global_file(path, table_list, batch_size):
     """
     Generate files in the specified directory `path`
     """
@@ -71,7 +72,7 @@ def generate_global_file(path, table_list):
         environment.get_template("update.sql"),
         os.path.join(path, "04_update.sql"),
         table_list,
-        10000,
+        batch_size,
     )
 
     generate_file(
@@ -110,13 +111,13 @@ def generate_global_file(path, table_list):
     )
 
 
-def main(table_list):
+def main(table_list, batch_size):
     """
     Do the generation of files in the global directory and in a drectory per table
     """
 
     # generate the SQL command in global files
-    generate_global_file("output", table_list)
+    generate_global_file("output", table_list, batch_size)
 
     # genreate the SQL command in one directory per table
     for table in table_list:
@@ -126,8 +127,11 @@ def main(table_list):
             os.makedirs(os.path.join("output", table['name']))
         except OSError:
             pass
-        generate_global_file(os.path.join("output", table['name']), ltable)
+        generate_global_file(os.path.join("output", table['name']), ltable, batch_size)
 
 
 if __name__ == "__main__":
-    main(tables)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-b", "--batch", help="the batch size of updates", type=int, default=10000)
+    args = parser.parse_args()
+    main(tables, args.batch)
