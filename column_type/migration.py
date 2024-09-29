@@ -13,10 +13,20 @@ from jinja2 import Environment, FileSystemLoader
 #
 # Describe here the column you want to change
 #
+# name : the table name
+# column : the column name
+# source_type : the original type of the column
+# dest_type : the new type of the column
 
 tables = [
-    {"name": "boats", "column": "price", "type": "numeric(8,3)"},
-    {"name": "cars", "column": "price", "type": "numeric(8,3)"},
+    {
+        "name": "boats", "column": "price",
+        "source_type": "numeric(7,2)", "dest_type": "numeric(8,3)"
+    },
+    {
+        "name": "cars",  "column": "price",
+        "source_type": "numeric(7,2)", "dest_type": "numeric(8,3)"
+    },
 ]
 
 
@@ -40,7 +50,7 @@ def generate_global_file(path, table_list):
         environment.get_template("test_before.sql"),
         os.path.join(path, "01_test_before.sql"),
         table_list,
-        2 * len(table_list),
+        3 * len(table_list),
     )
 
     generate_file(
