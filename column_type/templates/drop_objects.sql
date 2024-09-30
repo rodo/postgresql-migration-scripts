@@ -1,9 +1,16 @@
 --
--- Finally drop objects
+-- Finally drop temporary objects
+
+\set statement_timeout = '{{timeout}}ms'
+\set ON_ERROR_STOP
+\set ON_ERROR_ROLLBACK true
+
 {% for table in tables -%}
 
-DROP INDEX CONCURRENTLY {{ table.name }}_{{ table.column }}_migr01_idx;
+DROP INDEX CONCURRENTLY {{ table.name }}_{{ table.columns[0].column }}_migr01_idx;
 
-ALTER TABLE {{ table.name }} DROP COLUMN {{ table.column }}_old;
+{% for column in table['columns'] -%}
+ALTER TABLE {{ table.name }} DROP COLUMN {{ column.column }}_old;
+{% endfor %}
 
 {% endfor %}

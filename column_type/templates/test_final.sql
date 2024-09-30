@@ -3,11 +3,17 @@
 --
 BEGIN;
 
-SELECT 'index',0
+SELECT plan ( {{ nbstep }});
 
 {% for table in tables -%}
-UNION
-SELECT '{{ table.name }}', tuple_count FROM pgstattuple('{{ table.name}}_{{ table.column}}_migr01_idx')
+
+SELECT results_eq(
+
+   'SELECT tuple_count FROM pgstattuple(''{{ table.name}}_{{ table.columns[0].column}}_migr01_idx'')',
+   'SELECT 0::bigint',
+   'no tuples remains in index {{ table.name}}_{{ table.columns[0].column}}_migr01_idx');
 {% endfor %}
+
+SELECT * FROM finish();
 
 ROLLBACK;
