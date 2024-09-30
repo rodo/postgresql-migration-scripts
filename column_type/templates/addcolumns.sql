@@ -3,10 +3,10 @@
 -- Add an index to speed up the migration
 --
 
-\unset ECHO
-\set QUIET 1
+\timing on
 
-\set statement_timeout = '{{timeout}}ms'
+\set statement_timeout = '{{2*timeout}}ms'
+\set lock_timeout = '{{timeout}}ms'
 \set ON_ERROR_STOP
 \set ON_ERROR_ROLLBACK true
 

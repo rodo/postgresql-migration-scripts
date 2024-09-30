@@ -1,6 +1,6 @@
 --
 
-\set statement_timeout = '{{timeout}}ms'
+\set lock_timeout = '{{timeout}}ms'
 \set ON_ERROR_STOP
 \set ON_ERROR_ROLLBACK true
 

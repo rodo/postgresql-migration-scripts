@@ -20,6 +20,9 @@ SELECT col_type_is( '{{ table.name}}'::name, '{{ column.column }}'::name, '{{ co
 
 {% endfor %}
 --
+-- Update is based in the first column, we must ensure it's not null
+SELECT col_not_null( '{{ table.name}}'::name, '{{ table.columns[0].column }}'::name );
+--
 -- Check there is no index with the same name
 --
 SELECT hasnt_index( '{{ table.name}}'::name,

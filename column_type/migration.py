@@ -80,7 +80,7 @@ def generate_global_file(path, table_list, batch_size, timeout):
         environment.get_template("test_before.sql"),
         os.path.join(path, "01_test_before.sql"),
         table_list,
-        tap_elements_size(4, 4, table_list)
+        tap_elements_size(5, 4, table_list)
     )
 
     generate_file(
